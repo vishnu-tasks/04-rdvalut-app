@@ -1,0 +1,66 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+a{
+    text-decoration: none;
+}
+
+.header-section{
+    background-image: url('../assets/images/header_bg.png');
+    background-size: cover;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .header-top-section{
+        width: 60%;
+        display: flex;
+        justify-content: space-between;
+        .header-left-section{
+            span{
+                vertical-align: bottom;
+            }
+        }
+        .header-right-section{
+            width: 55%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            .need-help{
+                button{
+                    letter-spacing: 2px;
+                }
+            }
+            .header-phone-email-section{
+                width: 60%;
+                ul{
+                    display: flex;
+                    justify-content: space-between;
+                    list-style-type: none;
+                    li{
+                        padding-top: 12px;
+                        a{
+                            color: white;
+                            
+                            img{
+                                height: 20px;
+                                width: 20px;
+                                object-fit: contain;
+                            }
+                            span{
+                                margin: 0px 30px 0px 15px;
+                                font-size: 1.2rem;
+                                letter-spacing: -1px;
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+    }
+
+}
