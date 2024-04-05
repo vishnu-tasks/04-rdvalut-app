@@ -1,4 +1,4 @@
-import bulbIcon from "../assets/images/bulb-icon.png"
+import bulbIcon from "../assets/images/bulb-icon.png";
 import CompanyCardSection from "./CompanyCardSection";
 import { useState, useEffect } from "react";
 function CompanyDetails({data}){
@@ -9,11 +9,14 @@ function CompanyDetails({data}){
     const [inputIsChecked, setInputIsChecked] = useState(false);
     const [changeInputBackground, setChangeInputBackground] = useState({background: "#E9E4F3"});
     const [filteredData, setFilteredData] = useState([]);
+    const [currentRecords, setCurrentRecords] = useState([]);
+    const [nPages, setNpages] = useState(0)
+    const [checkedCompany, setCheckedCompany] = useState(false);
 
     //display logic for company input checkbox
     useEffect(()=>{
         const updatedStyle = {
-        display : (companyName !== "")? 'block': 'none',
+        display : (companyName !== "" && !(/\s/.test(companyName)))? 'block': 'none',
        };
        setElementStyle(updatedStyle);
 
@@ -28,20 +31,45 @@ function CompanyDetails({data}){
       const updatedData = data.filter((item)=>{
         if(item.company.includes(companyName.toUpperCase()) && companyName !== "")
             return item;
+        else if(companyName === ""){
+            setCurrentPage(1);
+            setInputIsChecked(false);
+        }    
       })
+      console.log(updatedData);
       setFilteredData(updatedData);
-       
-    },[companyName, inputIsChecked])
+      
+      if(inputIsChecked === false)
+        setCheckedCompany(false);
+    },[companyName, inputIsChecked, data])
 
     //handle checkbox
-    const handleChange = (e)=>{
-        setInputIsChecked(e.target.checked);
+    const handleChange = (check)=>{
+        const input = document.getElementById("noti_1");
+        input.checked = false;
+        setInputIsChecked(check);
     }
-    //logic for display the filtered records
-    const indexOfLastRecord = currentPage * recordsPerPage;
-    const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
-    const currentRecords = filteredData.slice(indexOfFirstRecord, indexOfLastRecord);
-    const nPages = Math.ceil(filteredData.length / recordsPerPage);
+    useEffect(()=>{
+        //logic for display the filtered records
+        const indexOfLastRecord = currentPage * recordsPerPage;
+        const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
+        setCurrentRecords(()=>{
+            return filteredData.slice(indexOfFirstRecord, indexOfLastRecord);
+        })
+        console.log("current records :"+currentRecords);
+        setNpages(()=>{
+            return Math.ceil(filteredData.length / recordsPerPage);
+        })
+        
+    },[filteredData,currentPage])
+    
+    useEffect(()=>{
+        if(inputIsChecked || checkedCompany){
+            const navigateClaimSection = document.getElementById("claim-section");
+            navigateClaimSection.scrollIntoView({ behavior: 'smooth' });
+        }
+    },[inputIsChecked, checkedCompany])
+    
 
 
     return(
@@ -52,7 +80,7 @@ function CompanyDetails({data}){
                         <div className="tell-us-about-your-company-left-section">
                             <hr className="tell-us-about-your-company-line"/>
                             <h3>  Company Name</h3>
-                            <div className="completed-text"><span>COMPLETED</span></div>
+                            {(inputIsChecked || checkedCompany)?<div className="completed-text"><span>COMPLETED</span></div>: ""}
                         </div>
                     </div>
                     <div className="col-md-6 col-xl-6 col-lg-6 col-sm-6 col-12">
@@ -62,19 +90,19 @@ function CompanyDetails({data}){
                                     {/* <span></span> */}
                                     {/* <input type="text" name="companyname" id="companyname" /> */}
                                     <div className="form-group">
-                                        <input type="text" value={companyName} id="enter_company_name" style={changeInputBackground} onChange={(e)=> setCompanyName(e.target.value)} placeholder="Type Your Company Here" /> 
+                                        <input type="text" value={companyName} id="enter_company_name" style={changeInputBackground} placeholder="Type Your Company Here" onChange={(e)=> setCompanyName(e.target.value)}  /> 
                                     </div>
                                     
                                     <div className="cust-checkbox" style={elementStyle}>
                                          <div className="custom-checkbox">
-                                            <input name="noti_6" className="checkbox-custom" id="noti_1" value="1" type="checkbox" onChange={(e)=> handleChange(e)} />
+                                            <input name="noti_6" className="checkbox-custom" id="noti_1" value="1" type="checkbox" onChange={(e)=> setInputIsChecked(e.target.checked)} checked={inputIsChecked} />
                                             <label className="checkbox-custom-label" htmlFor="noti_1" style={{color: changeInputBackground.color}}>I’d like to use this name</label>
                                         </div>
                                     </div>
                                 </div>
                                 <p className="custom-m-top-20">We have found <span>{filteredData.length}</span> companies with this name, please try
                                 again or use the name entered in the box above.</p>
-                                <CompanyCardSection data={currentRecords} nPages={nPages} currentPage={currentPage} setCurrentPage={setCurrentPage}/>
+                                <CompanyCardSection data={currentRecords} nPages={nPages} currentPage={currentPage} setCurrentPage={setCurrentPage} handleChange={handleChange} inputIsChecked={inputIsChecked} setCheckedCompany={setCheckedCompany} companyName={companyName}/>
                             </div>
                         </div>
                     </div>
