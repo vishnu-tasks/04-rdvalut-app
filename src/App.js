@@ -9,6 +9,7 @@ import { useState, useEffect } from "react";
 function App() {
   
   const [data, setData] = useState([]);
+  const [scrollToClaimSection, setScrollToClaimSection] = useState(false)
 
   const getData = async(url)=>{
     const response = await fetch(url);
@@ -24,11 +25,17 @@ function App() {
     .catch((err)=> console.log(err))
   },[])
 
+  function handleScroll(scrollToClaimSection){
+    console.log(scrollToClaimSection);
+    setScrollToClaimSection(scrollToClaimSection)
+  }
+  console.log("rerender");
+  
   return (
     <>
       <Header />
-      <CompanyDetails data={data} />
-      <ClaimSection />
+      <CompanyDetails data={data} handleScroll={handleScroll} />
+      <ClaimSection scrollToClaimSection={scrollToClaimSection} />
       <GrantsAndSubsidies />
       <Expenses />
       <Footer />

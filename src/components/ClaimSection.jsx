@@ -1,28 +1,21 @@
-import { useEffect, useState } from "react";
-// import DatePicker from "react-date-picker";
-// import 'react-date-picker/dist/DatePicker.css';
-// import 'react-calendar/dist/Calendar.css';
-// import { DateRangePicker } from 'react-date-range';
-// import 'react-date-range/dist/styles.css'; // main css file
-// import 'react-date-range/dist/theme/default.css'; // theme css file
+import { useEffect, useState, useRef } from "react";
 import 'react-dates/initialize';
-import { DateRangePicker, SingleDatePicker, DayPickerRangeController } from 'react-dates';
+import { DateRangePicker } from 'react-dates';
 import 'react-dates/lib/css/_datepicker.css';
 import moment from "moment";
 
 
-function ClaimSection(){
+function ClaimSection({scrollToClaimSection}){
 
-    // const [isChecked, setInputIsChecked] = useState(false);
     const [checkboxValue, setCheckboxValue] = useState(null);
     const [checkCheckboxValue, setCheckCheckboxValue] = useState(null);
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
-    const [focusedInput, setFocusedInput] = useState(null);
-    const [updatedDate, setUpdatedDate] = useState(null);
+    const claimRef = useRef(null);
 
+    //handle claim checkbox
     const handleClaimCheckbox = (event)=>{
-        console.log("checkbox is clicked");
+        // console.log("checkbox is clicked");
         if(checkCheckboxValue !== event.target.htmlFor){
             setCheckboxValue(event.target.htmlFor);
             setCheckCheckboxValue(event.target.htmlFor);
@@ -35,28 +28,12 @@ function ClaimSection(){
             
         }        
     }
-    console.log("entered claim section");
-    useEffect(()=>{
-        console.log(checkboxValue);
-        console.log(checkCheckboxValue);
-    },[checkboxValue,checkCheckboxValue])
+    // console.log("entered claim section");
 
-
-    useEffect(() => {
-        // Use useEffect to set the focusedInput state after the component mounts
-        setFocusedInput('startDate');
-      }, []);
-
-    
     const handleDatesChange = ({ startDate, endDate }) => {
-        
         setCheckboxValue(null);
         setStartDate(startDate);
         setEndDate(endDate);
-    };
-
-    const handleFocusChange = (focusedInput) => {
-        setFocusedInput(focusedInput);
     };
 
     useEffect(()=>{
@@ -71,24 +48,24 @@ function ClaimSection(){
             else
                 date.setDate(date.getDate() + 364);
             
-                
             // const newEndDate = moment(startDate).add(1, 'year').subtract(1, 'day').toDate();
-
             console.log(moment.utc(date));
-            setUpdatedDate(moment.utc(date))
-            
+            setEndDate(moment.utc(date));
         }
         
     },[startDate])
      
+
     useEffect(()=>{
-        // console.log(endDate);
-        console.log(updatedDate);
-        setEndDate(updatedDate)
-    },[updatedDate])
+        if(scrollToClaimSection)
+        claimRef.current.scrollIntoView({ behavior: 'smooth' });
+    },[scrollToClaimSection])
+
+    
 
     return(
-        <div className="row custom-m-top-40" id="claim-section">
+        <div className="row custom-m-top-40" id="claim-section" ref={claimRef} >
+            {/* {(scrollToClaimSection)? claimRef.current.scrollIntoView({ behavior: 'smooth' }): ""} */}
             <div className="col-md-3 col-xl-3 col-lg-3 col-sm-3 col-12">
                 <div className="tell-us-about-your-company-left-section">
                     <hr className="tell-us-about-your-company-line"/>
@@ -178,13 +155,13 @@ function ClaimSection(){
                                 startDate={startDate}
                                 startDateId="your_unique_start_date_id"
                                 endDate={endDate}
-                                disabled="endDate"
                                 endDateId="your_unique_end_date_id"
                                 onDatesChange={handleDatesChange}
                                 focusedInput={"startDate"}
                                 onFocusChange={()=> {}}
                                 keepOpenOnDateSelect={true}
                                 openDirection="up"
+                                readOnly
                                 />
                             </div>
                         </div>

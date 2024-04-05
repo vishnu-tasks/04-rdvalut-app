@@ -1,7 +1,7 @@
 import bulbIcon from "../assets/images/bulb-icon.png";
 import CompanyCardSection from "./CompanyCardSection";
 import { useState, useEffect } from "react";
-function CompanyDetails({data}){
+function CompanyDetails({data, handleScroll}){
     const [currentPage, setCurrentPage] = useState(1);
     const [recordsPerPage] = useState(6);
     const [companyName, setCompanyName] = useState("");
@@ -56,7 +56,7 @@ function CompanyDetails({data}){
         setCurrentRecords(()=>{
             return filteredData.slice(indexOfFirstRecord, indexOfLastRecord);
         })
-        console.log("current records :"+currentRecords);
+        // console.log("current records :"+currentRecords);
         setNpages(()=>{
             return Math.ceil(filteredData.length / recordsPerPage);
         })
@@ -64,10 +64,17 @@ function CompanyDetails({data}){
     },[filteredData,currentPage])
     
     useEffect(()=>{
-        if(inputIsChecked || checkedCompany){
-            const navigateClaimSection = document.getElementById("claim-section");
-            navigateClaimSection.scrollIntoView({ behavior: 'smooth' });
+        console.log("handle scroll");
+        if(inputIsChecked){
+            // const navigateClaimSection = document.getElementById("claim-section");
+            // navigateClaimSection.scrollIntoView({ behavior: 'smooth' });
+            handleScroll(inputIsChecked);
         }
+        else if(checkedCompany)
+            handleScroll(checkedCompany);
+        else
+            handleScroll(false);
+
     },[inputIsChecked, checkedCompany])
     
 

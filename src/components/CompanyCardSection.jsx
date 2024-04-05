@@ -30,7 +30,7 @@ function CompanyCardSection({
     }
     //display none when there is no companies
     useEffect(()=>{
-        console.log(data);
+        // console.log(data);
         if(data.length > 0)
             setDisplayCompanies(true)
         else
@@ -71,13 +71,14 @@ function CompanyCardSection({
     
     useEffect(()=>{
         if(inputIsChecked !== false || companyName === ""){
+            
             setCurrentCheckedElement(null);
             setCheckedIndex(null);
         } 
     },[inputIsChecked, companyName])
 
     return (
-        <div className="tell-us-about-your-company-card2" style={companyStyle}>
+        <div className="tell-us-about-your-company-card2 display-companies" style={companyStyle}>
             <div className="tell-us-about-your-company-maincard2 column-card-1 custom-m-top-20">
                 { 
                   data.map((item)=>(
