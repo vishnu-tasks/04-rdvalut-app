@@ -57,7 +57,7 @@ function ClaimSection({scrollToClaimSection}){
      
 
     useEffect(()=>{
-        if(scrollToClaimSection)
+        if(scrollToClaimSection.value)
         claimRef.current.scrollIntoView({ behavior: 'smooth' });
     },[scrollToClaimSection])
 

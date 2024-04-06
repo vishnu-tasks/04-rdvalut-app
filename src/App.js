@@ -9,7 +9,7 @@ import { useState, useEffect } from "react";
 function App() {
   
   const [data, setData] = useState([]);
-  const [scrollToClaimSection, setScrollToClaimSection] = useState(false)
+  const [scrollToClaimSection, setScrollToClaimSection] = useState({})
 
   const getData = async(url)=>{
     const response = await fetch(url);
@@ -26,11 +26,16 @@ function App() {
   },[])
 
   function handleScroll(scrollToClaimSection){
-    console.log(scrollToClaimSection);
-    setScrollToClaimSection(scrollToClaimSection)
+    setScrollToClaimSection({
+     value: scrollToClaimSection,
+     id: Math.random()
+    } )
   }
-  console.log("rerender");
+  // console.log("rerender");
   
+  useEffect(()=>{
+    console.log(scrollToClaimSection);
+  },[scrollToClaimSection])
   return (
     <>
       <Header />

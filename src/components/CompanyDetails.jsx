@@ -11,7 +11,7 @@ function CompanyDetails({data, handleScroll}){
     const [filteredData, setFilteredData] = useState([]);
     const [currentRecords, setCurrentRecords] = useState([]);
     const [nPages, setNpages] = useState(0)
-    const [checkedCompany, setCheckedCompany] = useState(false);
+    const [checkedCompany, setCheckedCompany] = useState({});
 
     //display logic for company input checkbox
     useEffect(()=>{
@@ -65,19 +65,21 @@ function CompanyDetails({data, handleScroll}){
     
     useEffect(()=>{
         console.log("handle scroll");
-        if(inputIsChecked){
+        if(inputIsChecked || checkedCompany.value){
             // const navigateClaimSection = document.getElementById("claim-section");
             // navigateClaimSection.scrollIntoView({ behavior: 'smooth' });
-            handleScroll(inputIsChecked);
+            handleScroll(true);
         }
-        else if(checkedCompany)
-            handleScroll(checkedCompany);
         else
             handleScroll(false);
-
     },[inputIsChecked, checkedCompany])
     
-
+    function handleCheckedCompany(value){
+        setCheckedCompany({
+          value: value,
+          id : Math.random()
+        });
+    }
 
     return(
         <div className="container-fluid">
@@ -109,7 +111,7 @@ function CompanyDetails({data, handleScroll}){
                                 </div>
                                 <p className="custom-m-top-20">We have found <span>{filteredData.length}</span> companies with this name, please try
                                 again or use the name entered in the box above.</p>
-                                <CompanyCardSection data={currentRecords} nPages={nPages} currentPage={currentPage} setCurrentPage={setCurrentPage} handleChange={handleChange} inputIsChecked={inputIsChecked} setCheckedCompany={setCheckedCompany} companyName={companyName}/>
+                                <CompanyCardSection data={currentRecords} nPages={nPages} currentPage={currentPage} setCurrentPage={setCurrentPage} handleChange={handleChange} inputIsChecked={inputIsChecked} handleCheckedCompany={handleCheckedCompany} companyName={companyName}/>
                             </div>
                         </div>
                     </div>

@@ -9,7 +9,7 @@ function CompanyCardSection({
     setCurrentPage,
     handleChange,
     inputIsChecked,
-    setCheckedCompany,
+    handleCheckedCompany,
     companyName
 }){
     
@@ -56,7 +56,7 @@ function CompanyCardSection({
     //handle checkbox
     const handleCheckBox = (e, index)=>{
         handleChange(false);
-        setCheckedCompany(e.target.checked);
+        handleCheckedCompany(e.target.checked);
         setCurrentCheckedElement(e.target.id);
 
         if (index === checkedIndex) {
