@@ -6,16 +6,19 @@ function CompanyCardSection({
     data,
     nPages,
     currentPage,
-    setCurrentPage
+    setCurrentPage,
+    handleChange,
+    inputIsChecked,
+    setCheckedCompany,
+    companyName
 }){
     
     const [disableNextBtn, setDisableNextBtn] = useState("");
     const [disablePrevBtn, setDisablePrevBtn] = useState("");
     const [displayCompanies, setDisplayCompanies] = useState(false);
     const [companyStyle, setCompanyStyle] = useState({});
-    const [checked, setChecked] = useState(false);
-    const [prevCheckedElement, setPrevCheckedElement] = useState(null)
-    const [background, setBackground] = useState("");
+    const [currentCheckedElement, setCurrentCheckedElement] = useState(null);
+    const [checkedIndex, setCheckedIndex] = useState(null);
 
     const goToNextPage = ()=>{
         if(currentPage !== nPages)
@@ -27,6 +30,7 @@ function CompanyCardSection({
     }
     //display none when there is no companies
     useEffect(()=>{
+        // console.log(data);
         if(data.length > 0)
             setDisplayCompanies(true)
         else
@@ -47,31 +51,50 @@ function CompanyCardSection({
             display : (displayCompanies)? "block" : "none"
         }
         setCompanyStyle(displayCompanyStyle)
-    },[currentPage, displayCompanies])
+    },[currentPage, displayCompanies, nPages])
 
-    const handleCheckBox = (e)=>{
-        setChecked(e.target.value);
-        setPrevCheckedElement(e.target.id);
+    //handle checkbox
+    const handleCheckBox = (e, index)=>{
+        handleChange(false);
+        setCheckedCompany(e.target.checked);
+        setCurrentCheckedElement(e.target.id);
 
-        const removePreviousChecked = document.getElementById(prevCheckedElement);
-        
+        if (index === checkedIndex) {
+            // Uncheck the checkbox if it is already checked
+            setCheckedIndex(null);
+            setCurrentCheckedElement(null);
+          } else {
+            // Check the clicked checkbox and uncheck others
+            setCheckedIndex(index);
+        }
     }
     
-    
+    useEffect(()=>{
+        if(inputIsChecked !== false || companyName === ""){
+            
+            setCurrentCheckedElement(null);
+            setCheckedIndex(null);
+        } 
+    },[inputIsChecked, companyName])
 
     return (
-        <div className="tell-us-about-your-company-card2" style={companyStyle}>
+        <div className="tell-us-about-your-company-card2 display-companies" style={companyStyle}>
             <div className="tell-us-about-your-company-maincard2 column-card-1 custom-m-top-20">
                 { 
                   data.map((item)=>(
                     <div className="tell-us-about-your-company-card2-width" key={item.index}>
-                        <div className="tell-us-about-your-company-card2-label tell-us-about-your-company-card-section-label" key={item.index}>
+                        <div className={`tell-us-about-your-company-card2-label tell-us-about-your-company-card-section-label ${(currentCheckedElement === String(item.index) && inputIsChecked === false) ? "change-checked-company" : ""}`} data-num = {`${item.index}`}>
                             <div className="tell-us-about-your-company-card2-top">
                                 <span>{item.company}</span>
                                 <div className="cust-checkbox">
                                     <div className="custom-checkbox">
-                                        <input name="noti_6" className="checkbox-custom checked-company" id={item.index} value="3" type="checkbox" onClick={(e)=> handleCheckBox(e)}  />
-                                        <label className="checkbox-custom-label" for={item.index}></label>
+                                        <input name="noti_6" className="checkbox-custom checked-company" id={item.index} type="checkbox"  
+                                        onChange={(e)=> {
+                                            handleCheckBox(e, item.index);
+                                        }}
+                                        checked={checkedIndex === item.index}
+                                        />
+                                        <label className="checkbox-custom-label" htmlFor={item.index}></label>
                                     </div>
                                 </div>
                             </div>
@@ -88,9 +111,9 @@ function CompanyCardSection({
                 <span><label>{currentPage}</label>/<label>{nPages}</label></span>
                 </div>
                 <div className="next-back-section">
-                <label className={disablePrevBtn} onClick={goToPrevPage}><img className="left-arrow" src={leftArrow}/><span>BACK</span></label>
+                <label className={disablePrevBtn} onClick={goToPrevPage}><img className="left-arrow" src={leftArrow} alt="left-arrow"/><span>BACK</span></label>
                 <b>|</b>
-                <label className={disableNextBtn} onClick={goToNextPage}><span>NEXT</span><img className="right-arrow" src={rightArrow}/></label>
+                <label className={disableNextBtn} onClick={goToNextPage}><span>NEXT</span><img className="right-arrow" src={rightArrow} alt="right-arrow"/></label>
                 </div>
             </div>
         </div>
