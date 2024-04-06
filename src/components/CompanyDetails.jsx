@@ -89,7 +89,7 @@ function CompanyDetails({data, handleScroll}){
                         <div className="tell-us-about-your-company-left-section">
                             <hr className="tell-us-about-your-company-line"/>
                             <h3>  Company Name</h3>
-                            {(inputIsChecked || checkedCompany)?<div className="completed-text"><span>COMPLETED</span></div>: ""}
+                            {(inputIsChecked || checkedCompany.value)?<div className="completed-text"><span>COMPLETED</span></div>: ""}
                         </div>
                     </div>
                     <div className="col-md-6 col-xl-6 col-lg-6 col-sm-6 col-12">

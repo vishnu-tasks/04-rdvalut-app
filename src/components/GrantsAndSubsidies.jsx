@@ -1,21 +1,29 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
 
-function GrantsAndSubsidies(){
+function GrantsAndSubsidies({scrollToGrantsSection, handleExpensesScroll}){
 
     const [checkboxValue, setCheckboxValue] = useState(null);
+    const grantsRef = useRef(null);
 
     const handleCheckBox = (event)=>{
         if(checkboxValue !== event.target.htmlFor){
             setCheckboxValue(event.target.htmlFor);
+            handleExpensesScroll(true);
         }
         else{
             setCheckboxValue(null);
+            handleExpensesScroll(false);
         }
     }
 
+    useEffect(()=>{
+        if(scrollToGrantsSection.value)
+        grantsRef.current.scrollIntoView({ behavior: 'smooth' });
+    },[scrollToGrantsSection])
+
     return(
-        <div className="grands_subsidies_section row custom-m-top-40">
+        <div className="grands_subsidies_section row custom-m-top-40" ref={grantsRef} style={(scrollToGrantsSection.value) ? {} :  {pointerEvents: "none", opacity: "0.4"}} >
             <div className="col-md-3 col-xl-3 col-lg-3 col-sm-3 col-12">
                 <div className="tell-us-about-your-company-left-section">
                     <hr className="tell-us-about-your-company-line"/>

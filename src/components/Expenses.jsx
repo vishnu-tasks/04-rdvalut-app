@@ -1,9 +1,18 @@
 import rdexpensesicon from "../assets/images/rdexpensesicon.png"
 import bulbIcon from "../assets/images/bulb-icon.png"
+import { useRef, useEffect } from "react";
 
-function Expenses(){
+function Expenses({scrollToExpensesSection}){
+
+    const expensesRef = useRef(null);
+
+    useEffect(()=>{
+        if(scrollToExpensesSection.value)
+        expensesRef.current.scrollIntoView({ behavior: 'smooth' });
+    },[scrollToExpensesSection])
+
     return (
-        <div className="rdexpenses_section row custom-m-top-40">
+        <div className="rdexpenses_section row custom-m-top-40" ref={expensesRef} style={(scrollToExpensesSection.value) ? {} :  {pointerEvents: "none", opacity: "0.4"}} >
             <div className="col-md-3 col-xl-3 col-lg-3 col-sm-3 col-12">
                 <div className="tell-us-about-your-company-left-section">
                     <hr className="tell-us-about-your-company-line"/>

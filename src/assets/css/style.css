@@ -901,3 +901,8 @@ border-right: 0;
 .claim-card-section{
   height: 950px;
 }
+
+
+.disable-date{
+  opacity: 0.4;
+}

@@ -9,7 +9,9 @@ import { useState, useEffect } from "react";
 function App() {
   
   const [data, setData] = useState([]);
-  const [scrollToClaimSection, setScrollToClaimSection] = useState({})
+  const [scrollToClaimSection, setScrollToClaimSection] = useState({});
+  const [scrollToGrantsSection, setScrollToGrantsSection] = useState({});
+  const [scrollToExpensesSection, setScrollToExpensesSection] = useState({});
 
   const getData = async(url)=>{
     const response = await fetch(url);
@@ -25,13 +27,27 @@ function App() {
     .catch((err)=> console.log(err))
   },[])
 
-  function handleScroll(scrollToClaimSection){
-    setScrollToClaimSection({
-     value: scrollToClaimSection,
-     id: Math.random()
-    } )
+  function handleClaimScroll(scrollToClaimSection){
+      setScrollToClaimSection({
+        value: scrollToClaimSection,
+        id: Math.random()
+      })
   }
   // console.log("rerender");
+
+  function handleGrantsScroll(scrollToGrantsSection){
+    setScrollToGrantsSection({
+      value: scrollToGrantsSection,
+      id : Math.random()
+    })
+  }
+
+  function handleExpensesScroll(scrollToExpensesSection){
+    setScrollToExpensesSection({
+      value : scrollToExpensesSection,
+      id : Math.random()
+    })
+  }
   
   useEffect(()=>{
     console.log(scrollToClaimSection);
@@ -39,10 +55,10 @@ function App() {
   return (
     <>
       <Header />
-      <CompanyDetails data={data} handleScroll={handleScroll} />
-      <ClaimSection scrollToClaimSection={scrollToClaimSection} />
-      <GrantsAndSubsidies />
-      <Expenses />
+      <CompanyDetails data={data} handleScroll={handleClaimScroll} />
+      <ClaimSection scrollToClaimSection={scrollToClaimSection} handleGrantsScroll={handleGrantsScroll} />
+      <GrantsAndSubsidies scrollToGrantsSection={scrollToGrantsSection} handleExpensesScroll={handleExpensesScroll} />
+      <Expenses scrollToExpensesSection={scrollToExpensesSection} />
       <Footer />
     </>
   );

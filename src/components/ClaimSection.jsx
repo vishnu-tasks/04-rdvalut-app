@@ -5,7 +5,7 @@ import 'react-dates/lib/css/_datepicker.css';
 import moment from "moment";
 
 
-function ClaimSection({scrollToClaimSection}){
+function ClaimSection({scrollToClaimSection, handleGrantsScroll}){
 
     const [checkboxValue, setCheckboxValue] = useState(null);
     const [checkCheckboxValue, setCheckCheckboxValue] = useState(null);
@@ -21,11 +21,12 @@ function ClaimSection({scrollToClaimSection}){
             setCheckCheckboxValue(event.target.htmlFor);
             setStartDate(null);
             setEndDate(null);
+            handleGrantsScroll(true);
         }
         else{
             setCheckboxValue(null);
             setCheckCheckboxValue(null);
-            
+            handleGrantsScroll(false);
         }        
     }
     // console.log("entered claim section");
@@ -34,6 +35,7 @@ function ClaimSection({scrollToClaimSection}){
         setCheckboxValue(null);
         setStartDate(startDate);
         setEndDate(endDate);
+        
     };
 
     useEffect(()=>{
@@ -51,6 +53,7 @@ function ClaimSection({scrollToClaimSection}){
             // const newEndDate = moment(startDate).add(1, 'year').subtract(1, 'day').toDate();
             console.log(moment.utc(date));
             setEndDate(moment.utc(date));
+            handleGrantsScroll(true);
         }
         
     },[startDate])
@@ -64,7 +67,7 @@ function ClaimSection({scrollToClaimSection}){
     
 
     return(
-        <div className="row custom-m-top-40" id="claim-section" ref={claimRef} >
+        <div className="row custom-m-top-40" id="claim-section" ref={claimRef} style={(scrollToClaimSection.value) ? {} :  {pointerEvents: "none", opacity: "0.4"}} >
             {/* {(scrollToClaimSection)? claimRef.current.scrollIntoView({ behavior: 'smooth' }): ""} */}
             <div className="col-md-3 col-xl-3 col-lg-3 col-sm-3 col-12">
                 <div className="tell-us-about-your-company-left-section">
@@ -76,7 +79,7 @@ function ClaimSection({scrollToClaimSection}){
                 <div className="tell-us-about-your-company-center-section">
                     <div className="tell-us-about-your-company-card-section claim-card-section">
                         <p>Please select the claim period you would like to estimate your R&D claim for?</p>
-                        <div className={`custom-checbox-1 tell-us-about-your-company-card-section-label ${("claim-check-1" === checkboxValue)? "change-checked-company": ""}`}>
+                        <div className={`custom-checbox-1 tell-us-about-your-company-card-section-label ${("claim-check-1" === checkboxValue)? "change-checked-company": ""}`} style={(startDate !== null)? {opacity:"0.4"} : {}} >
                             <span>Period 1: 1 April 2018 To 31 March 2019</span>
                             <div className="cust-checkbox">
                                 <div className="custom-checkbox">
@@ -90,7 +93,7 @@ function ClaimSection({scrollToClaimSection}){
                                 </div>
                             </div>
                         </div>
-                        <div className={`custom-checbox-1 tell-us-about-your-company-card-section-label ${("claim-check-2" === checkboxValue)? "change-checked-company": ""}`}>
+                        <div className={`custom-checbox-1 tell-us-about-your-company-card-section-label ${("claim-check-2" === checkboxValue)? "change-checked-company": ""}`} style={(startDate !== null)? {opacity:"0.4"} : {}} >
                             <span>Period 2: 1 April 2018 To 31 March 2019</span>
                             <div className="cust-checkbox">
                                 <div className="custom-checkbox">
@@ -99,7 +102,7 @@ function ClaimSection({scrollToClaimSection}){
                                 </div>
                             </div>
                         </div>
-                        <div className={`custom-checbox-1 tell-us-about-your-company-card-section-label ${("claim-check-3" === checkboxValue)? "change-checked-company": ""}`}>
+                        <div className={`custom-checbox-1 tell-us-about-your-company-card-section-label ${("claim-check-3" === checkboxValue)? "change-checked-company": ""}`} style={(startDate !== null)? {opacity:"0.4"} : {}} >
                             <span>Period 3: 1 April 2018 To 31 March 2019</span>
                             <div className="cust-checkbox">
                                 <div className="custom-checkbox">
@@ -150,7 +153,7 @@ function ClaimSection({scrollToClaimSection}){
                                     <div id="datepicker3" className="calendar"></div>
                                 </div>
                             </div> */}
-                            <div className="datepicker-container">
+                            <div className="datepicker-container" style={(startDate !== null)? {} : {opacity: "0.4"}}>
                                 <DateRangePicker
                                 startDate={startDate}
                                 startDateId="your_unique_start_date_id"
