@@ -34,19 +34,18 @@ function CompanyDetails({data, handleScroll}){
         else if(companyName === ""){
             setCurrentPage(1);
             setInputIsChecked(false);
+            setCheckedCompany(false);
         }    
       })
-      console.log(updatedData);
+    //   console.log(updatedData);
       setFilteredData(updatedData);
-      
-      if(inputIsChecked === false)
-        setCheckedCompany(false);
+
     },[companyName, inputIsChecked, data])
 
     //handle checkbox
     const handleChange = (check)=>{
-        const input = document.getElementById("noti_1");
-        input.checked = false;
+        // const input = document.getElementById("noti_1");
+        // input.checked = false;
         setInputIsChecked(check);
     }
     useEffect(()=>{
@@ -56,30 +55,29 @@ function CompanyDetails({data, handleScroll}){
         setCurrentRecords(()=>{
             return filteredData.slice(indexOfFirstRecord, indexOfLastRecord);
         })
-        // console.log("current records :"+currentRecords);
         setNpages(()=>{
             return Math.ceil(filteredData.length / recordsPerPage);
         })
-        
     },[filteredData,currentPage])
     
     useEffect(()=>{
-        console.log("handle scroll");
-        if(inputIsChecked || checkedCompany.value){
-            // const navigateClaimSection = document.getElementById("claim-section");
-            // navigateClaimSection.scrollIntoView({ behavior: 'smooth' });
+        // console.log("handle scroll");
+        if(inputIsChecked || checkedCompany){
+            // console.log("claim scroll checked");
             handleScroll(true);
         }
-        else
+        else{
             handleScroll(false);
+            // console.log("claim scroll unchecked");
+        }
+            
     },[inputIsChecked, checkedCompany])
     
     function handleCheckedCompany(value){
-        setCheckedCompany({
-          value: value,
-          id : Math.random()
-        });
+        // console.log("handle checked company");
+        setCheckedCompany(value);
     }
+
 
     return(
         <div className="container-fluid">
@@ -89,15 +87,13 @@ function CompanyDetails({data, handleScroll}){
                         <div className="tell-us-about-your-company-left-section">
                             <hr className="tell-us-about-your-company-line"/>
                             <h3>  Company Name</h3>
-                            {(inputIsChecked || checkedCompany.value)?<div className="completed-text"><span>COMPLETED</span></div>: ""}
+                            {(inputIsChecked || checkedCompany)?<div className="completed-text"><span>COMPLETED</span></div>: ""}
                         </div>
                     </div>
                     <div className="col-md-6 col-xl-6 col-lg-6 col-sm-6 col-12">
                         <div className="tell-us-about-your-company-center-section">
                             <div className="tell-us-about-your-company-card-section">
                                 <div className="tell-us-about-your-company-card-section-label" style={changeInputBackground}>
-                                    {/* <span></span> */}
-                                    {/* <input type="text" name="companyname" id="companyname" /> */}
                                     <div className="form-group">
                                         <input type="text" value={companyName} id="enter_company_name" style={changeInputBackground} placeholder="Type Your Company Here" onChange={(e)=> setCompanyName(e.target.value)}  /> 
                                     </div>

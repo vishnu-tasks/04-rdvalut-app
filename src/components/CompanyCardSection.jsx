@@ -30,7 +30,6 @@ function CompanyCardSection({
     }
     //display none when there is no companies
     useEffect(()=>{
-        // console.log(data);
         if(data.length > 0)
             setDisplayCompanies(true)
         else

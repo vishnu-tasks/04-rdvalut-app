@@ -31,17 +31,14 @@ function App() {
       setScrollToClaimSection({
         value: scrollToClaimSection,
         id: Math.random()
-      })
+      })   
   }
-  // console.log("rerender");
-
   function handleGrantsScroll(scrollToGrantsSection){
     setScrollToGrantsSection({
       value: scrollToGrantsSection,
       id : Math.random()
     })
   }
-
   function handleExpensesScroll(scrollToExpensesSection){
     setScrollToExpensesSection({
       value : scrollToExpensesSection,
@@ -49,9 +46,6 @@ function App() {
     })
   }
   
-  useEffect(()=>{
-    console.log(scrollToClaimSection);
-  },[scrollToClaimSection])
   return (
     <>
       <Header />

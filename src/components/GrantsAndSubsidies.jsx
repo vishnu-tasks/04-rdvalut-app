@@ -20,6 +20,9 @@ function GrantsAndSubsidies({scrollToGrantsSection, handleExpensesScroll}){
     useEffect(()=>{
         if(scrollToGrantsSection.value)
         grantsRef.current.scrollIntoView({ behavior: 'smooth' });
+        else{
+           setCheckboxValue(null); 
+        }
     },[scrollToGrantsSection])
 
     return(
@@ -28,6 +31,7 @@ function GrantsAndSubsidies({scrollToGrantsSection, handleExpensesScroll}){
                 <div className="tell-us-about-your-company-left-section">
                     <hr className="tell-us-about-your-company-line"/>
                     <h3>  Grants & Subsidies</h3>
+                    {(checkboxValue)?<div className="completed-text"><span>COMPLETED</span></div>: ""}
                 </div>
             </div>
             <div className="col-md-6 col-xl-6 col-lg-6 col-sm-6 col-12">

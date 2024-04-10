@@ -11,14 +11,19 @@ function ClaimSection({scrollToClaimSection, handleGrantsScroll}){
     const [checkCheckboxValue, setCheckCheckboxValue] = useState(null);
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
+    const [startDateInput, setStartDateInput] = useState("");
+    const [endDateInput, setEndDateInput] = useState("")
     const claimRef = useRef(null);
 
     //handle claim checkbox
     const handleClaimCheckbox = (event)=>{
-        // console.log("checkbox is clicked");
+
         if(checkCheckboxValue !== event.target.htmlFor){
             setCheckboxValue(event.target.htmlFor);
             setCheckCheckboxValue(event.target.htmlFor);
+            //set start date input
+            setStartDateInput("01/04/2018");
+            setEndDateInput("31/03/2019");
             setStartDate(null);
             setEndDate(null);
             handleGrantsScroll(true);
@@ -26,20 +31,50 @@ function ClaimSection({scrollToClaimSection, handleGrantsScroll}){
         else{
             setCheckboxValue(null);
             setCheckCheckboxValue(null);
+            //remove date input
+            setStartDateInput("");
+            setEndDateInput("");
             handleGrantsScroll(false);
         }        
     }
-    // console.log("entered claim section");
 
-    const handleDatesChange = ({ startDate, endDate }) => {
+    const handleDatesChange = ( selectedDate ) => {
+        console.log(selectedDate.startDate);
+        // console.log(endDate);
         setCheckboxValue(null);
-        setStartDate(startDate);
-        setEndDate(endDate);
-        
+        setStartDate(selectedDate.startDate);
+        setStartDateInput(selectedDate.startDate);
+        // setEndDate(endDate);   
     };
+
+    const handleStartDateInput = (value)=>{
+        setStartDateInput(value);
+    }
+    useEffect(()=>{
+        if(startDateInput !== ""){
+            console.log(startDateInput);
+            const date = new Date(startDateInput);
+            const startYear = date.getFullYear();
+            const startMonth = date.getMonth();
+            const endYear = (date.getFullYear() + 1);
+            if(((((0 === startYear % 4) && (0 !== startYear % 100)) || (0 === startYear % 400)) && startMonth <= 1) ||
+            (((0 === endYear % 4) && (0 !== endYear % 100)) || (0 === endYear % 400)))
+                date.setDate(date.getDate() + 365);   
+            else
+                date.setDate(date.getDate() + 364);
+            const formattedData = moment(date).format('YYYY-MM-DD')
+            console.log(formattedData);
+            setEndDateInput(formattedData);
+        }
+        else{
+            setStartDateInput("");
+            setEndDateInput("");
+        }
+    }, [startDateInput])
 
     useEffect(()=>{
         if(startDate !== null){
+            console.log("handle date change");
             const date = new Date(moment.utc(startDate));
             const startYear = date.getFullYear();
             const startMonth = date.getMonth();
@@ -51,28 +86,35 @@ function ClaimSection({scrollToClaimSection, handleGrantsScroll}){
                 date.setDate(date.getDate() + 364);
             
             // const newEndDate = moment(startDate).add(1, 'year').subtract(1, 'day').toDate();
-            console.log(moment.utc(date));
+            // console.log(moment.utc(date));
             setEndDate(moment.utc(date));
+            setEndDateInput(moment.utc(date).format("YYYY-MM-DD"));
             handleGrantsScroll(true);
         }
         
     },[startDate])
      
-
+    
     useEffect(()=>{
-        if(scrollToClaimSection.value)
-        claimRef.current.scrollIntoView({ behavior: 'smooth' });
+        console.log(scrollToClaimSection.value);
+        if(scrollToClaimSection.value){ 
+            claimRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+        else{
+            setCheckboxValue(null);
+            setStartDate(null);
+        }
     },[scrollToClaimSection])
 
     
 
     return(
-        <div className="row custom-m-top-40" id="claim-section" ref={claimRef} style={(scrollToClaimSection.value) ? {} :  {pointerEvents: "none", opacity: "0.4"}} >
-            {/* {(scrollToClaimSection)? claimRef.current.scrollIntoView({ behavior: 'smooth' }): ""} */}
+        <div className="row custom-m-top-40" ref={claimRef} style={(scrollToClaimSection.value) ? {} :  {pointerEvents: "none", opacity: "0.4"}} >
             <div className="col-md-3 col-xl-3 col-lg-3 col-sm-3 col-12">
                 <div className="tell-us-about-your-company-left-section">
                     <hr className="tell-us-about-your-company-line"/>
                     <h3>  Your R&D Claim Period</h3>
+                    {(startDate || checkboxValue)?<div className="completed-text"><span>COMPLETED</span></div>: ""}
                 </div>
             </div>
             <div className="col-md-6 col-xl-6 col-lg-6 col-sm-6 col-12">
@@ -115,18 +157,30 @@ function ClaimSection({scrollToClaimSection, handleGrantsScroll}){
                             <div className="calendar-label-input form-group">
                                 <label>Claim Period Start Date:</label>
                                 <div className="calendar-input-section">          
-                                    <input type="text" id="datepicker1" 
+                                    <input type="date" id="datepicker1"
                                     value={
-                                        (checkboxValue !== null)?"01/04/2018": "" || (startDate !== null)?new Date(moment.utc(startDate)).toLocaleDateString() : "dd/mm/yyyy"
-                                        
-                                    } />
+                                        (checkboxValue !== null)?"2018-04-01": "" || 
+                                        (startDate !== null)?new Date(moment.utc(startDate).format("YYYY-MM-DD")):"" ||
+                                        startDateInput
+                                    }
+                                    onChange={(event)=> handleStartDateInput(event.target.value)}
+                                    placeholder="mm/dd/yyyy"
+                                    />
                                     <span className="left-line">|</span>
                                 </div>
                             </div>
                             <div className="calendar-label-input form-group">
                                 <label>Claim Period End Date:</label>
                                 <div className="calendar-input-section">   
-                                    <input type="text" id="datepicker2" value={(checkboxValue !== null)?"31/03/2019": "" || (endDate !== null)?new Date(moment.utc(endDate)).toLocaleDateString() : "dd/mm/yyyy"} />
+                                    <input type="date" id="datepicker2" 
+                                    value={
+                                        (checkboxValue !== null)?"2019-03-31": "" || 
+                                        (endDate !== null)?new Date(moment.utc(endDate).format("YYYY-MM-DD")) : "" ||
+                                        endDateInput
+                                    }
+                                    placeholder="mm/dd/yyyy"
+                                    readOnly
+                                    />
                                     <span className="left-line">|</span>
                                 </div>
                             </div>

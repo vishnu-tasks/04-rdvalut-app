@@ -629,7 +629,7 @@ height: 44px !important;
   color: #fff !important;
   margin: 5px;
   border: 0;
-    border-radius: 0;
+  border-radius: 0;
 }
 .nav-tabs .nav-link.active, .nav-tabs .nav-item.show .nav-link{
   color: #6750A0 !important;
@@ -876,12 +876,15 @@ border-right: 0;
 }
 
 /* my modification */
+.company-selection-card{
+  padding-left: 30px;
+  padding-right: 30px;
+}
 .display-companies{
   height: 550px;
 }
 .change-checked-company{
   background: linear-gradient(to right, #7856AD , #7164EB);
-  /* color: white; */
 }
 .change-checked-company span{
   color: white;
@@ -892,7 +895,6 @@ border-right: 0;
 .tell-us-about-your-company-card-section .form-group #enter_company_name{
   width: 230%;
 }
-
 .datepicker-container{
   margin-left: 10%;
   position: absolute;
@@ -901,8 +903,6 @@ border-right: 0;
 .claim-card-section{
   height: 950px;
 }
-
-
 .disable-date{
   opacity: 0.4;
 }
