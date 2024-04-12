@@ -80,13 +80,13 @@ function Header() {
                         </a>
                       </li>
                       <li className="active">
-                        <a href="">
+                        <a>
                           <label>2</label>
                           <span>Your Company</span>
                         </a>
                       </li>
                       <li>
-                        <a href="">
+                        <a>
                           <label>3</label>
                           <span>Your Estimated R&D Claim</span>
                         </a>
